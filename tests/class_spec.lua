@@ -2,18 +2,26 @@ describe('Class', function()
     local Class = require('class')
 
     local Enemy = Class:subclass('Enemy')
-    Enemy.defaults = {
+    local defaults = {
         damage = 100,
         motto = 'Me kill hoomans !',
     }
 
+    -- Constructor
     function Enemy:new()
-        self.damage = self.damage or Enemy.defaults.damage
-        self.enemy = true
+        self.damage = self.damage or defaults.damage
+        self.motto  = self.motto or defaults.motto
+        self.enemy  = true
     end
 
+    -- Static function
+    function Enemy.static()
+        return 'Enemy'
+    end
+
+    -- Method
     function Enemy:say()
-        return Enemy.defaults.motto
+        return self.motto
     end
 
     describe('Enemy -> Class', function()
@@ -26,10 +34,13 @@ describe('Class', function()
                 assert.is.equal(enemy.enemy, true)
             end)
             it('Enemy:say()', function()
-                assert.is.equal(enemy:say(), Enemy.defaults.motto)
+                assert.is.equal(enemy:say(), defaults.motto)
             end)
-            it('enemy is Class', function()
+            it('enemy is an instance of Class', function()
                 assert.is.equal(enemy:isA(Class), true)
+            end)
+            it('Enemy.static', function()
+                assert.is.equal(enemy.static(), 'Enemy')
             end)
             it('Enemy is a subclass of Class', function()
                 assert.is.equal(Enemy:isSubclassOf(Class), true)
@@ -39,7 +50,7 @@ describe('Class', function()
         describe('Default ctor', function()
             local enemy = Enemy {}
             it('default damage', function()
-                assert.is.equal(enemy.damage, Enemy.defaults.damage)
+                assert.is.equal(enemy.damage, defaults.damage)
             end)
             it('enemy field', function()
                 assert.is.equal(enemy.enemy, true)
@@ -49,11 +60,17 @@ describe('Class', function()
 
     describe('Koopa -> Enemy -> Class', function()
         local Koopa = Enemy:subclass('Koopa')
-        local motto = 'Boo!'
+        local boo = 'Boo!'
 
         -- Override method
-        function Koopa:say()
-            return motto
+        -- (dot syntax because the self argument is not used)
+        function Koopa.say(_)
+            return boo
+        end
+
+        -- Override static
+        function Koopa.static()
+            return 'Koopa'
         end
 
         local koopa = Koopa { damage = 300 }
@@ -64,13 +81,16 @@ describe('Class', function()
             assert.is.equal(koopa.enemy, true)
         end)
         it('Koopa:say()', function()
-            assert.is.equal(koopa:say(), motto)
+            assert.is.equal(koopa:say(), boo)
         end)
-        it('super:say (access via class)', function()
-            assert.is.equal(Koopa.super:say(), Enemy.defaults.motto)
+        it('Koopa.static', function()
+            assert.is.equal(koopa.static(), 'Koopa')
         end)
-        it('super:say (access via instance)', function()
-            assert.is.equal(koopa.super:say(), Enemy.defaults.motto)
+        it('super.static (access via class)', function()
+            assert.is.equal(Koopa.super.static(), Enemy.static())
+        end)
+        it('super.static (access via instance)', function()
+            assert.is.equal(koopa.super.static(), Enemy.static())
         end)
     end)
 
@@ -82,11 +102,8 @@ describe('Class', function()
 
         function Boss:new()
             self.level = self.level or 'high'
-            self.boss = true
-        end
-
-        function Boss:say()
-            return motto
+            self.boss  = true
+            self.motto = motto
         end
 
         describe('Basic', function()
@@ -147,7 +164,7 @@ describe('Class', function()
                 it('boss field', function()
                     assert.is.equal(bowser.boss, true)
                 end)
-                it('Enemy:say()', function()
+                it('Bowser:say() is Boss:say()', function()
                     assert.is.equal(bowser:say(), motto)
                 end)
             end)
