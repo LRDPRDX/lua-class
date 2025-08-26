@@ -1,11 +1,14 @@
 # A (yet another, I know ) simple class library for Lua
 
+[![Busted](https://github.com/LRDPRDX/lua-class/actions/workflows/busted.yml/badge.svg)](https://github.com/LRDPRDX/lua-class/actions/workflows/busted.yml)
+[![Luacheck](https://github.com/LRDPRDX/lua-class/actions/workflows/luacheck.yml/badge.svg)](https://github.com/LRDPRDX/lua-class/actions/workflows/luacheck.yml)
+
 # Features
 
  - Inheritance (subclass)
  - Constructor call downwards the hierarchy (from parent to child)
  - Table-oriented constructor (the only parameter of a constructor is a table)
- - RTTI (super)
+ - RTTI (`isA`, `isSubclassOf`)
 
 # Example
 
