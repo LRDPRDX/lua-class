@@ -101,6 +101,7 @@ end
 --- Constructor.
 -- Called when an instance of a class is created. The instance created is accessible inside
 -- this method as `self`. **Note**: there is no need to return anything from that method.
+-- @param _ `self`, the instance itself
 -- @usage
 --     local Animal = Class:subclass('Animal')
 --
