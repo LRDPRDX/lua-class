@@ -2,6 +2,7 @@
 
 [![Busted](https://github.com/LRDPRDX/lua-class/actions/workflows/busted.yml/badge.svg)](https://github.com/LRDPRDX/lua-class/actions/workflows/busted.yml)
 [![Luacheck](https://github.com/LRDPRDX/lua-class/actions/workflows/luacheck.yml/badge.svg)](https://github.com/LRDPRDX/lua-class/actions/workflows/luacheck.yml)
+[![Docs](https://github.com/LRDPRDX/lua-class/actions/workflows/doc.yml/badge.svg)](https://github.com/LRDPRDX/lua-class/actions/workflows/doc.yml)
 
 # Features
 
@@ -115,3 +116,6 @@ describe('Tutorial', function()
     end)
 end)
 ```
+
+# Documentation
+See [here](https://lrdprdx.github.io/lua-class/) for documentation.

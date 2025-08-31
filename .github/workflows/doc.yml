@@ -5,6 +5,9 @@ on:
 
 jobs:
   build-documentation:
+    permissions:
+      deployments: write
+      contents: write
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -16,14 +19,17 @@ jobs:
     - name: Setup Lua Rocks
       uses: leafo/gh-actions-luarocks@v4
     - name: Setup dependencies
-      run: luarocks install --only-deps ldoc-dev-1.rockspec
+      run: luarocks install ldoc
     - name: Build docs
-      run: ldoc .
+      run: |
+        ldoc .
+
     - name: Deploy
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./doc/
         force_orphan: true
+        enable_jekyll: false
+        publish_dir: doc
         publish_branch: github-pages
