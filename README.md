@@ -11,11 +11,23 @@
  - Table-oriented constructor (the only parameter of a constructor is a table)
  - RTTI (`isA`, `isSubclassOf`)
 
+# Installation
+
+Either copy the `subclass.lua` file to the location accessible by your project or :
+
+```bash
+luarocks make
+```
+
+in the root directory of this repo (see [luarocks](https://luarocks.org)).
+
+P.S. Someday I will probably publish this as a rock so no need to clone the repo.
+
 # Example
 
 ```lua
 describe('Tutorial', function()
-    local Class = require('class')
+    local Class = require('subclass')
     -- Create a new class
     local Drawable = Class:subclass('Drawable')
 
