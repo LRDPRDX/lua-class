@@ -1,11 +1,15 @@
---- @module class
-local Class = {}
-
---- API.
+--- Class factory.
+--
+-- **Source**
+--
+-- Source code can be found [here](https://github.com/LRDPRDX/lua-class).
+--
+-- **User's guide**
+--
 -- * a _class table_, or a _class_ - is a table that defines a class. This table can be called
 --   to create instances of that class. Returned by the `Class:subclass` method.
 -- * an _instance table_, or an _instance_, is a table that represents an instance of a class
--- * the `new` method of a class is the _constructor_ of the class. Called when an instance
+-- * the `Class:new` method is the _constructor_ of the class. Called when an instance
 --   is created
 -- * _class.super_ or _instance.super_ refers to the superclass table (if any)
 --
@@ -43,7 +47,13 @@ local Class = {}
 --    -- > A:new()
 --    -- > B:new()
 --    -- > C:new()
--- @section api
+-- @classmod ClassModule
+-- @warning I have to use another name for this module (instead of obvious Class) because of this:
+-- https://github.com/lunarmodules/ldoc/issues/249
+
+--- Represents a _class_.
+-- @type Class
+local Class = {}
 
 --- Creates a subclass of a class.
 -- @param name Must be a string. This is the name of new class.
@@ -101,7 +111,10 @@ end
 --- Constructor.
 -- Called when an instance of a class is created. The instance created is accessible inside
 -- this method as `self`. **Note**: there is no need to return anything from that method.
--- @param _ `self`, the instance itself
+-- @param _ The `self` parameter, the instance itself. **Note**: the dot syntax here instead of
+-- familiar colon one because of two reasons: a) I want to explicitely document the `self`
+-- parameter and b) the linter complains about not used parameter
+--
 -- @usage
 --     local Animal = Class:subclass('Animal')
 --
@@ -131,8 +144,8 @@ end
 
 --- Checks whether a given class is a subclass of another one.
 -- **Note**: `self` here must be a class - not an instance. To check whether an instance is
--- a type of a class use `isA`.
--- @param class A class table
+-- a type of a class use `Class:isA`.
+-- @param other A class table
 -- @return `true` if a class is a subclass of another class. `false` otherwise.
 -- @usage
 --     local Animal = Class:subclass('Animal')
@@ -142,14 +155,14 @@ end
 --     Dog:isSubclassOf(Animal) --> true
 --     Cat:isSubclassOf(Animal) --> true
 --     Cat:isSubclassOf(Dog) --> false
-function Class:isSubclassOf (class)
-    if self == class then
+function Class:isSubclassOf (other)
+    if self == other then
         return true
     end
 
     local super = rawget(self, 'super')
     if super then
-        return super:isSubclassOf(class)
+        return super:isSubclassOf(other)
     end
 
     return false
@@ -158,7 +171,7 @@ end
 --- Checks whether a given object is an instance of a class.
 -- **Note**: `self` here must be an instance - not a class. To check whether a class is a subclass
 -- of another one use `isSubclassOf`.
--- @param class A class table
+-- @param other A class table
 -- @return `true` if the object is an instance of a given class. `false` otherwise.
 -- @usage
 --     local Animal = Class:subclass('Animal')
@@ -168,9 +181,9 @@ end
 --
 --     bobik:isA(Animal) --> true
 --     bobik:isA(Dog) --> true
-function Class:isA (class)
+function Class:isA (other)
     local mt = getmetatable(self)
-    return mt:isSubclassOf(class)
+    return mt:isSubclassOf(other)
 end
 
 return Class
