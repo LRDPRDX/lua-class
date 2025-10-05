@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Class for Lua</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Class for Lua</h1>
+
+
+
+
+
+<h2>Topics</h2>
+<ul class="">
+  <li><strong>README</strong></li>
+</ul>
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../index.html">subclass</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+
+<h1>A (yet another, I know ) simple class library for Lua</h1>
+
+<p><a href="https://github.com/LRDPRDX/lua-class/actions/workflows/busted.yml"><img src="https://github.com/LRDPRDX/lua-class/actions/workflows/busted.yml/badge.svg" alt="Busted"/></a>
+<a href="https://github.com/LRDPRDX/lua-class/actions/workflows/luacheck.yml"><img src="https://github.com/LRDPRDX/lua-class/actions/workflows/luacheck.yml/badge.svg" alt="Luacheck"/></a>
+<a href="https://github.com/LRDPRDX/lua-class/actions/workflows/doc.yml"><img src="https://github.com/LRDPRDX/lua-class/actions/workflows/doc.yml/badge.svg" alt="Docs"/></a></p>
+
+<h1>Features</h1>
+
+<ul>
+    <li>Inheritance (subclass)</li>
+    <li>Constructor call downwards the hierarchy (from parent to child)</li>
+    <li>Table-oriented constructor (the only parameter of a constructor is a table)</li>
+    <li>RTTI (<a href="../index.html#Class:isA">isA</a>, <a href="../index.html#Class:isSubclassOf">isSubclassOf</a>)</li>
+</ul>
+
+<h1>Installation</h1>
+
+<p>Either copy the <code>subclass.lua</code> file to the location accessible by your project or :</p>
+
+
+<pre>
+luarocks make
+</pre>
+
+
+<p>in the root directory of this repo (see <a href="https://luarocks.org">luarocks</a>).</p>
+
+<p>P.S. Someday I will probably publish this as a rock so no need to clone the repo.</p>
+
+<h1>Example</h1>
+
+
+<pre>
+<span class="function-name">describe</span>(<span class="string">'Tutorial'</span>, <span class="keyword">function</span>()
+    <span class="keyword">local</span> Class = <span class="global">require</span>(<span class="string">'subclass'</span>)
+    <span class="comment">-- Create a new class
+</span>    <span class="keyword">local</span> Drawable = Class:<span class="function-name">subclass</span>(<span class="string">'Drawable'</span>)
+
+    <span class="comment">-- Constructor. Called every time a new instance is created.
+</span>    <span class="comment">-- self is the instance itself. No need to return anything from the constructor.
+</span>    <span class="keyword">function</span> Drawable:<span class="function-name">new</span>()
+        self.color  = self.color <span class="keyword">or</span> { <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span> }
+        self.weight = self.weight <span class="keyword">or</span> <span class="number">1</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">-- Static fields. Can be overridden by a child class
+</span>    Drawable.nDim = <span class="number">2</span>
+    Drawable.name = <span class="string">'drawable'</span>
+
+    <span class="comment">-- Method. Can be overridden by a child class.
+</span>    <span class="comment">-- (note: the dot syntax to explicitly express that the self parameter isn't used)
+</span>    <span class="keyword">function</span> Drawable.<span class="function-name">size</span>(_)
+        <span class="keyword">return</span> <span class="keyword">nil</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">-- Polyline is a Drawable
+</span>    <span class="keyword">local</span> Polyline = Drawable:<span class="function-name">subclass</span>(<span class="string">'Polyline'</span>)
+
+    <span class="keyword">function</span> Polyline:<span class="function-name">new</span>()
+        self.points = self.points <span class="keyword">or</span> {}
+    <span class="keyword">end</span>
+
+    <span class="comment">-- Override static field
+</span>    Polyline.name = <span class="string">'polyline'</span>
+
+    <span class="comment">-- Override method
+</span>    <span class="keyword">function</span> Polyline:<span class="function-name">size</span>()
+        <span class="keyword">if</span> #self.points == <span class="number">0</span> <span class="keyword">then</span>
+            <span class="keyword">return</span> <span class="keyword">nil</span>
+        <span class="keyword">end</span>
+
+        <span class="keyword">local</span> minX, minY, maxX, maxY = <span class="keyword">nil</span>, <span class="keyword">nil</span>, <span class="keyword">nil</span>, <span class="keyword">nil</span>
+        <span class="keyword">for</span> _, p <span class="keyword">in</span> <span class="global">ipairs</span>(self.points) <span class="keyword">do</span>
+            minX = minX <span class="keyword">and</span> <span class="global">math</span>.<span class="function-name">min</span>(p.x, minX) <span class="keyword">or</span> p.x
+            minY = minY <span class="keyword">and</span> <span class="global">math</span>.<span class="function-name">min</span>(p.y, minY) <span class="keyword">or</span> p.y
+            maxX = maxX <span class="keyword">and</span> <span class="global">math</span>.<span class="function-name">max</span>(p.x, maxX) <span class="keyword">or</span> p.x
+            maxY = maxY <span class="keyword">and</span> <span class="global">math</span>.<span class="function-name">max</span>(p.y, maxY) <span class="keyword">or</span> p.y
+        <span class="keyword">end</span>
+
+        <span class="keyword">return</span> { x = maxX - minX,
+                 y = maxY - minY }
+    <span class="keyword">end</span>
+
+    <span class="keyword">function</span> Polyline:<span class="function-name">nPoints</span>()
+        <span class="keyword">return</span> #self.points
+    <span class="keyword">end</span>
+
+    <span class="keyword">local</span> d = <span class="function-name">Drawable</span> {
+        color = { <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span> }
+    }
+
+    <span class="keyword">local</span> p = <span class="function-name">Polyline</span> {
+        weight = <span class="number">2</span>,
+        points = {
+            { x = <span class="number">0</span>, y = <span class="number">0</span> },
+            { x = <span class="number">0</span>, y = <span class="number">1</span> },
+            { x = <span class="number">1</span>, y = <span class="number">1</span> },
+            { x = <span class="number">1</span>, y = <span class="number">0</span> },
+        }
+    }
+
+    <span class="function-name">it</span>(<span class="string">'subclass of'</span>, <span class="keyword">function</span>()
+        <span class="global">assert</span>.is.<span class="function-name">equal</span>(Drawable:<span class="function-name">isSubclassOf</span>(Class)    , <span class="keyword">true</span>)
+        <span class="global">assert</span>.is.<span class="function-name">equal</span>(Polyline:<span class="function-name">isSubclassOf</span>(Class)    , <span class="keyword">true</span>)
+        <span class="global">assert</span>.is.<span class="function-name">equal</span>(Polyline:<span class="function-name">isSubclassOf</span>(Drawable) , <span class="keyword">true</span>)
+    <span class="keyword">end</span>)
+
+    <span class="function-name">it</span>(<span class="string">'instance of'</span>, <span class="keyword">function</span>()
+        <span class="global">assert</span>.is.<span class="function-name">equal</span>(d:<span class="function-name">isA</span>(Class)    , <span class="keyword">true</span>)
+        <span class="global">assert</span>.is.<span class="function-name">equal</span>(d:<span class="function-name">isA</span>(Drawable) , <span class="keyword">true</span>)
+        <span class="global">assert</span>.is.<span class="function-name">equal</span>(p:<span class="function-name">isA</span>(Class)    , <span class="keyword">true</span>)
+        <span class="global">assert</span>.is.<span class="function-name">equal</span>(p:<span class="function-name">isA</span>(Drawable) , <span class="keyword">true</span>)
+        <span class="global">assert</span>.is.<span class="function-name">equal</span>(p:<span class="function-name">isA</span>(Polyline) , <span class="keyword">true</span>)
+    <span class="keyword">end</span>)
+
+    <span class="function-name">it</span>(<span class="string">'fields'</span>, <span class="keyword">function</span>()
+        <span class="global">assert</span>.is.<span class="function-name">equal</span>(d.name       , Drawable.name )
+        <span class="global">assert</span>.is.<span class="function-name">equal</span>(d.nDim       , Drawable.nDim )
+        <span class="global">assert</span>.is.<span class="function-name">equal</span>(p.super.name , Drawable.name ) <span class="comment">-- access the superclass
+</span>        <span class="global">assert</span>.is.<span class="function-name">same</span>(d.color       , { <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span> } )
+        <span class="global">assert</span>.is.<span class="function-name">equal</span>(d.weight     , <span class="number">1</span> )
+
+        <span class="global">assert</span>.is.<span class="function-name">equal</span>(p.name   , Polyline.name )
+        <span class="global">assert</span>.is.<span class="function-name">equal</span>(p.nDim   , Drawable.nDim )
+        <span class="global">assert</span>.is.<span class="function-name">same</span>(p.color   , { <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span> } )
+        <span class="global">assert</span>.is.<span class="function-name">equal</span>(p.weight , <span class="number">2</span> )
+    <span class="keyword">end</span>)
+
+    <span class="function-name">it</span>(<span class="string">'methods'</span>, <span class="keyword">function</span>()
+        <span class="global">assert</span>.is.<span class="function-name">equal</span>(d:<span class="function-name">size</span>()    , <span class="keyword">nil</span>)
+        <span class="global">assert</span>.is.<span class="function-name">same</span>(p:<span class="function-name">size</span>()     , { x = <span class="number">1</span>, y = <span class="number">1</span> })
+        <span class="global">assert</span>.is.<span class="function-name">equal</span>(p:<span class="function-name">nPoints</span>() , <span class="number">4</span>)
+    <span class="keyword">end</span>)
+<span class="keyword">end</span>)
+</pre>
+
+
+<h1>Documentation</h1>
+<p>See <a href="https://lrdprdx.github.io/lua-class/">here</a> for documentation.</p>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/lunarmodules/LDoc">LDoc 1.5.0</a></i>
+<i style="float:right;">Last updated 2025-10-05 08:47:19 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

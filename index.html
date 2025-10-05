@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Class for Lua</title>
+    <link rel="stylesheet" href="ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Class for Lua</h1>
+
+
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Class_Class">Class Class </a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><strong>subclass</strong></li>
+</ul>
+<h2>Topics</h2>
+<ul class="">
+  <li><a href="topics/README.md.html">README</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>subclass</code></h1>
+<p>Class factory.</p>
+<p>
+
+
+<p> <strong>Source</strong></p>
+
+<p> Source code can be found <a href="https://github.com/LRDPRDX/lua-class">here</a>.</p>
+
+<p> <strong>User's guide</strong></p>
+
+<ul>
+    <li>a <em>class table</em>, or a <em>class</em> - is a table that defines a class. This table can be called
+    to create instances of that class. Returned by the <a href="index.html#Class:subclass">Class:subclass</a> method.</li>
+    <li>an <em>instance table</em>, or an <em>instance</em>, is a table that represents an instance of a class</li>
+    <li>the <code>Class:new</code> method is the <em>constructor</em> of the class. Called when an instance
+    is created</li>
+    <li><em>class.super</em> or <em>instance.super</em> refers to the superclass table (if any)</li>
+</ul>
+
+<p> To create an instance of class <code>A</code> you <em>call</em> <code>A</code> with a table as the only parameter.
+ This table
+ is accessible then inside the <code>A:new</code> method as <code>self</code>:</p>
+
+
+<pre>
+<span class="keyword">local</span> A = Class:<span class="function-name">subclass</span>(<span class="string">'A'</span>)
+<span class="keyword">function</span> A:<span class="function-name">new</span>()
+    <span class="global">print</span>((<span class="string">'From A:new() : self.foo = %s'</span>):<span class="function-name">format</span>(self.foo))
+<span class="keyword">end</span>
+
+<span class="keyword">local</span> a = <span class="function-name">A</span> { foo = <span class="string">'bar'</span> }
+<span class="comment">-- &gt; From A:new() : self.foo = bar</span>
+</pre>
+
+<p> When an instance is created <em>all</em> constructors in the hierarchy are called
+ in the order from parent to child:</p>
+
+
+<pre>
+<span class="keyword">local</span> A = Class:<span class="function-name">subclass</span>(<span class="string">'A'</span>)
+<span class="keyword">function</span> A:<span class="function-name">new</span>()
+    <span class="global">print</span>(<span class="string">'A:new()'</span>)
+<span class="keyword">end</span>
+
+<span class="keyword">local</span> B = A:<span class="function-name">subclass</span>(<span class="string">'B'</span>)
+<span class="keyword">function</span> B:<span class="function-name">new</span>()
+    <span class="global">print</span>(<span class="string">'B:new()'</span>)
+<span class="keyword">end</span>
+
+<span class="keyword">local</span> C = B:<span class="function-name">subclass</span>(<span class="string">'C'</span>)
+<span class="keyword">function</span> C:<span class="function-name">new</span>()
+    <span class="global">print</span>(<span class="string">'C:new()'</span>)
+<span class="keyword">end</span>
+
+<span class="keyword">local</span> c = <span class="function-name">C</span> { foo = <span class="string">'bar'</span> }
+<span class="comment">-- &gt; A:new()
+</span><span class="comment">-- &gt; B:new()
+</span><span class="comment">-- &gt; C:new()</span>
+</pre>
+
+</p>
+
+
+<h2><a href="#Class_Class">Class Class </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Class:subclass">Class:subclass (name)</a></td>
+	<td class="summary">Creates a subclass of a class.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Class.new">Class.new (_)</a></td>
+	<td class="summary">Constructor.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Class:isSubclassOf">Class:isSubclassOf (other)</a></td>
+	<td class="summary">Checks whether a given class is a subclass of another one.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Class:isA">Class:isA (other)</a></td>
+	<td class="summary">Checks whether a given object is an instance of a class.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header has-description"><a name="Class_Class"></a>Class Class </h2>
+
+          <div class="section-description">
+          Represents a <em>class</em>.
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "Class:subclass"></a>
+    <strong>Class:subclass (name)</strong>
+    </dt>
+    <dd>
+    Creates a subclass of a class.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+         Must be a string. This is the name of new class.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        New class (a table).
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> Class = <span class="global">require</span>(<span class="string">'subclass'</span>) <span class="comment">-- this module
+</span>
+<span class="keyword">local</span> Animal = Class:<span class="function-name">subclass</span>(<span class="string">'Animal'</span>) <span class="comment">-- a class, or a class table
+</span><span class="keyword">local</span> Dog    = Animal:<span class="function-name">subclass</span>(<span class="string">'Dog'</span>) <span class="comment">-- also a class
+</span><span class="keyword">local</span> bobik  = <span class="function-name">Dog</span> { name = <span class="string">'bob'</span> } <span class="comment">-- an instance of the Dog class</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Class.new"></a>
+    <strong>Class.new (_)</strong>
+    </dt>
+    <dd>
+    Constructor.
+ Called when an instance of a class is created. The instance created is accessible inside
+ this method as <code>self</code>. <strong>Note</strong>: there is no need to return anything from that method.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">_</span>
+         The <code>self</code> parameter, the instance itself. <strong>Note</strong>: the dot syntax here instead of
+ familiar colon one because of two reasons: a) I want to explicitely document the <code>self</code>
+ parameter and b) the linter complains about not used parameter if <code>:new()</code> is used.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> Animal = Class:<span class="function-name">subclass</span>(<span class="string">'Animal'</span>)
+
+<span class="keyword">function</span> Animal:<span class="function-name">new</span>()
+    <span class="global">print</span>(<span class="string">'Animal:new()'</span>)
+    self.hp    = self.hp <span class="keyword">or</span> <span class="number">100</span>
+    self.alive = <span class="keyword">true</span>
+<span class="keyword">end</span>
+
+<span class="keyword">local</span> Dog = Animal:<span class="function-name">subclass</span>(<span class="string">'Dog'</span>)
+
+<span class="keyword">function</span> Dog:<span class="function-name">new</span>()
+    <span class="global">print</span>(<span class="string">'Dog:new()'</span>)
+    self.hasTail = <span class="keyword">true</span>
+<span class="keyword">end</span>
+
+<span class="keyword">local</span> bobik = <span class="function-name">Dog</span> { name = <span class="string">'bob'</span>, hp = <span class="number">200</span> }
+<span class="comment">-- &gt; Animal:new()
+</span><span class="comment">-- &gt; Dog:new()
+</span>
+<span class="global">assert</span>(bobik.alive == <span class="keyword">true</span>)
+<span class="global">assert</span>(bobik.hasTail == <span class="keyword">true</span>)
+<span class="global">assert</span>(bobik.hp == <span class="number">200</span>)
+<span class="global">assert</span>(bobik.name == <span class="string">'bob'</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Class:isSubclassOf"></a>
+    <strong>Class:isSubclassOf (other)</strong>
+    </dt>
+    <dd>
+    Checks whether a given class is a subclass of another one.
+ <strong>Note</strong>: <code>self</code> here must be a class - not an instance. To check whether an instance is
+ a type of a class use <a href="index.html#Class:isA">Class:isA</a>.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">other</span>
+         A class table
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        <code>true</code> if a class is a subclass of another class. <code>false</code> otherwise.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> Animal = Class:<span class="function-name">subclass</span>(<span class="string">'Animal'</span>)
+<span class="keyword">local</span> Dog    = Animal:<span class="function-name">subclass</span>(<span class="string">'Dog'</span>)
+<span class="keyword">local</span> Cat    = Animal:<span class="function-name">subclass</span>(<span class="string">'Cat'</span>)
+
+Dog:<span class="function-name">isSubclassOf</span>(Animal) <span class="comment">--&gt; true
+</span>Cat:<span class="function-name">isSubclassOf</span>(Animal) <span class="comment">--&gt; true
+</span>Cat:<span class="function-name">isSubclassOf</span>(Dog) <span class="comment">--&gt; false</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Class:isA"></a>
+    <strong>Class:isA (other)</strong>
+    </dt>
+    <dd>
+    Checks whether a given object is an instance of a class.
+ <strong>Note</strong>: <code>self</code> here must be an instance - not a class. To check whether a class is a subclass
+ of another one use <a href="index.html#Class:isSubclassOf">isSubclassOf</a>.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">other</span>
+         A class table
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        <code>true</code> if the object is an instance of a given class. <code>false</code> otherwise.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> Animal = Class:<span class="function-name">subclass</span>(<span class="string">'Animal'</span>)
+<span class="keyword">local</span> Dog    = Animal:<span class="function-name">subclass</span>(<span class="string">'Dog'</span>)
+
+<span class="keyword">local</span> bobik = <span class="function-name">Dog</span> { name = <span class="string">'bob'</span> }
+
+bobik:<span class="function-name">isA</span>(Animal) <span class="comment">--&gt; true
+</span>bobik:<span class="function-name">isA</span>(Dog) <span class="comment">--&gt; true</span></pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/lunarmodules/LDoc">LDoc 1.5.0</a></i>
+<i style="float:right;">Last updated 2025-10-05 08:47:19 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
