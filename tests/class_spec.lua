@@ -1,6 +1,6 @@
 describe('Class', function()
     describe('Tutorial', function()
-        local Class = require('class')
+        local Class = require('subclass')
         -- Create a new class
         local Drawable = Class:subclass('Drawable')
 
@@ -106,7 +106,7 @@ describe('Class', function()
         motto = 'Me kill hoomans !',
     }
 
-    local Class = require('class')
+    local Class = require('subclass')
 
     local Enemy = Class:subclass('Enemy')
 

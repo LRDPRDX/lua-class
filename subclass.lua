@@ -47,7 +47,7 @@
 --    -- > A:new()
 --    -- > B:new()
 --    -- > C:new()
--- @classmod ClassModule
+-- @module subclass
 -- @warning I have to use another name for this module (instead of obvious Class) because of this:
 -- https://github.com/lunarmodules/ldoc/issues/249
 
@@ -60,7 +60,7 @@ local Class = {}
 -- @return New class (a table).
 --
 -- @usage
---     local Class = require('class') -- this module
+--     local Class = require('subclass') -- this module
 --
 --     local Animal = Class:subclass('Animal') -- a class, or a class table
 --     local Dog    = Animal:subclass('Dog') -- also a class
@@ -113,7 +113,7 @@ end
 -- this method as `self`. **Note**: there is no need to return anything from that method.
 -- @param _ The `self` parameter, the instance itself. **Note**: the dot syntax here instead of
 -- familiar colon one because of two reasons: a) I want to explicitely document the `self`
--- parameter and b) the linter complains about not used parameter
+-- parameter and b) the linter complains about not used parameter if `:new()` is used.
 --
 -- @usage
 --     local Animal = Class:subclass('Animal')
